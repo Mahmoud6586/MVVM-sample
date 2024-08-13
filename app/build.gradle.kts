@@ -69,5 +69,6 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
     implementation (libs.gson)
+    implementation("android.arch.lifecycle:extensions:1.1.1")
 
 }
