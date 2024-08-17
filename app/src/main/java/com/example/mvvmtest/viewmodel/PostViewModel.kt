@@ -2,6 +2,8 @@ package com.example.mvvmtest.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.mvvmtest.data.model.Post
 import com.example.mvvmtest.data.remote.ApiClient
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +19,7 @@ class PostViewModel : ViewModel() {
     fun getAllPostsRequest() {
         loading.value = true
 
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val response = ApiClient.api.getAllPosts()
 
             withContext(Dispatchers.Main) {
