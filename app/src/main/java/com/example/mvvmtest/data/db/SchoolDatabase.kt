@@ -15,7 +15,7 @@ abstract class SchoolDatabase : RoomDatabase() {
 
     companion object {
 
-        @Volatile // volatile: to prevent different threads call this object simultaneously
+        @Volatile // volatile: to prevent multiple threads call this object simultaneously
         private var INSTANCE: SchoolDatabase? = null
 
 

@@ -1,10 +1,12 @@
 package com.example.mvvmtest
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,11 +29,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.mvvmtest.data.model.Grade
 import com.example.mvvmtest.data.model.Post
+import com.example.mvvmtest.data.model.Student
 import com.example.mvvmtest.ui.theme.MvvmTestTheme
 import com.example.mvvmtest.viewmodel.PostViewModel
+import com.example.mvvmtest.viewmodel.StudentsViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -39,7 +48,24 @@ class MainActivity : ComponentActivity() {
             MvvmTestTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
-                        ObserverPostsViewModel()
+
+                        val viewModel by viewModels<StudentsViewModel>()
+
+//                        val std1 = Student(1, "Mahmoud", "Fekri", "0021624569", Grade.ONE)
+//                        val std2 = Student(2, "Reza", "Asadi", "0025984236", Grade.THREE)
+//
+//
+//                        viewModel.addNewStudent(std1)
+//                        viewModel.addNewStudent(std2)
+
+                        GlobalScope.launch {
+                            viewModel.allStudents.collectLatest { students ->
+                                for (item in students) {
+                                    Log.e("3636", item.name)
+                                }
+                            }
+                        }
+
                     }
 
                 }
