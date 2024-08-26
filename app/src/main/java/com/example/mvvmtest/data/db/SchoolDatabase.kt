@@ -13,27 +13,6 @@ abstract class SchoolDatabase : RoomDatabase() {
     abstract fun studentDao(): StudentDao
 
 
-    companion object {
 
-        @Volatile // volatile: to prevent multiple threads call this object simultaneously
-        private var INSTANCE: SchoolDatabase? = null
-
-
-        fun getDatabase(context: Context): SchoolDatabase {
-            val instance = INSTANCE
-            if (instance != null) {
-                return instance
-            }
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    SchoolDatabase::class.java,
-                    DATABASE_NAME
-                ).build()
-                INSTANCE = instance
-                return instance
-            }
-        }
-    }
 
 }

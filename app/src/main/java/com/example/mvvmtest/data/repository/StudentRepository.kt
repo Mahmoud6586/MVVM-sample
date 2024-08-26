@@ -3,8 +3,9 @@ package com.example.mvvmtest.data.repository
 import com.example.mvvmtest.data.db.StudentDao
 import com.example.mvvmtest.data.model.Student
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class StudentRepository(private val studentDao: StudentDao) {
+class StudentRepository @Inject constructor(private val studentDao: StudentDao) {
 
     val allStudents: Flow<List<Student>> = studentDao.getAllStudents()
 

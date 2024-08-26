@@ -5,13 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.mvvmtest.data.model.Post
-import com.example.mvvmtest.data.remote.ApiClient
+import com.example.mvvmtest.data.remote.ApiInterface
+import com.example.mvvmtest.data.repository.PostsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class PostViewModel : ViewModel() {
+@HiltViewModel
+class PostViewModel @Inject constructor(
+    private val repository: PostsRepository
+) : ViewModel() {
     val postList = MutableLiveData<List<Post>>()
     val postListError = MutableLiveData<String?>()
     val loading = MutableLiveData<Boolean>()
@@ -20,7 +26,7 @@ class PostViewModel : ViewModel() {
         loading.value = true
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = ApiClient.api.getAllPosts()
+            val response = repository.getAllPosts()
 
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful && response.body() != null) {

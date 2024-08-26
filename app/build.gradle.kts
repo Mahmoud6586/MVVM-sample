@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    id("com.google.dagger.hilt.android")
 
 }
 
@@ -73,10 +74,19 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.gson)
     implementation("android.arch.lifecycle:extensions:1.1.1")
-    implementation("androidx.room:room-runtime:2.3.0")
+    implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-rxjava3:2.3.0")
 
     annotationProcessor("androidx.room:room-compiler:2.3.0")
     annotationProcessor("android.arch.persistence.room:compiler:1.0.0")
     kapt("androidx.room:room-ktx:2.3.0 ")
+
+    //Hilt DI
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

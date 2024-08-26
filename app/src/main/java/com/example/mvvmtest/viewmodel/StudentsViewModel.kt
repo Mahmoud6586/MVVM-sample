@@ -2,24 +2,22 @@ package com.example.mvvmtest.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mvvmtest.data.db.SchoolDatabase
 import com.example.mvvmtest.data.model.Student
 import com.example.mvvmtest.data.repository.StudentRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StudentsViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class StudentsViewModel @Inject constructor(private val repository: StudentRepository) :
+    ViewModel() {
 
-    val allStudents: Flow<List<Student>>
-    private val repository: StudentRepository
-
-    init {
-        val studentDao = SchoolDatabase.getDatabase(application).studentDao()
-        repository = StudentRepository(studentDao)
-        allStudents = repository.allStudents
-    }
+    val allStudents: Flow<List<Student>> = repository.allStudents
 
     fun addNewStudent(student: Student) {
 
