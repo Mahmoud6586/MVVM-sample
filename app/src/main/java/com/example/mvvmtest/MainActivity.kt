@@ -27,14 +27,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.mvvmtest.data.model.Grade
 import com.example.mvvmtest.data.model.Post
 import com.example.mvvmtest.data.model.Student
 import com.example.mvvmtest.ui.theme.MvvmTestTheme
+import com.example.mvvmtest.viewmodel.DataStoreViewModel
 import com.example.mvvmtest.viewmodel.PostViewModel
 import com.example.mvvmtest.viewmodel.StudentsViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -49,7 +52,10 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
 
-                        val viewModel by viewModels<StudentsViewModel>()
+
+                        TestDataStore()
+
+//                        val viewModel by viewModels<StudentsViewModel>()
 
 //                        val std1 = Student(1, "Mahmoud", "Fekri", "0021624569", Grade.ONE)
 //                        val std2 = Student(2, "Reza", "Asadi", "0025984236", Grade.THREE)
@@ -58,17 +64,41 @@ class MainActivity : ComponentActivity() {
 //                        viewModel.addNewStudent(std1)
 //                        viewModel.addNewStudent(std2)
 
-                        GlobalScope.launch {
-                            viewModel.allStudents.collectLatest { students ->
-                                for (item in students) {
-                                    Log.e("3636", item.name)
-                                }
-                            }
-                        }
+//                        GlobalScope.launch {
+//                            viewModel.allStudents.collectLatest { students ->
+//                                for (item in students) {
+//                                    Log.e("3636", item.name)
+//                                }
+//                            }
+//                        }
 
                     }
 
                 }
+            }
+        }
+    }
+
+
+    @Composable
+    fun TestDataStore(
+        viewModel: DataStoreViewModel = hiltViewModel()
+    ) {
+
+        viewModel.saveUserPhone("09102302434")
+
+        // To wait data be saved and then fetching it
+        Thread.sleep(1000)
+
+        //getUserPhone is a Coroutine and should be
+        //collected to have its value
+
+        viewModel.getUserPhone()
+
+        LaunchedEffect(Dispatchers.Main) {
+
+            viewModel.userPhone.collectLatest {
+                Log.e("3636", it)
             }
         }
     }
